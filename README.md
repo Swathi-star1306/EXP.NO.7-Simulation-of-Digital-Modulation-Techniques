@@ -48,53 +48,60 @@ Plot message, carrier, and PSK signal.
 
 # PROGRAM
 **ASK MODULATION**
-<pre> ```scilab// ASK modulation 
-clear; 
-clc; 
-// Parameters 
-data = [1 0 1 0 1 1 0 1]; // Binary data to be transmitted 
-bit_duration = 1; // Duration of each bit 
-fc = 10; // Carrier frequency (adjusted to ensure at least 10 cycles per bit) 
-amplitude = 2; // Carrier amplitude 
-sampling_rate = 1000; // Number of samples per bit 
-// Time vector 
-t = 0:1/sampling_rate:(bit_duration*length(data) - 1/sampling_rate); 
-// Message signal 
-message_signal = []; 
-for k = 1:length(data) 
-message_signal = [message_signal data(k) * ones(1, sampling_rate)]; 
-end 
-// Carrier signal 
-carrier_signal = amplitude * sin(2 * %pi * fc * t); 
-// ASK modulation 
-ask_signal = []; 
-for k = 1:length(data) 
-if data(k) == 1 
-ask_signal = [ask_signal amplitude * sin(2 * %pi * fc * (0:1/sampling_rate:bit_duration - 1/sampling_rate))]; 
-else 
-ask_signal = [ask_signal zeros(1, sampling_rate)]; 
-end 
-end 
-// Plotting 
-clf; 
-subplot(3, 1, 1); 
-plot(t, message_signal); 
-title('Message Signal'); 
-xlabel('Time'); 
-ylabel('Amplitude'); 
-subplot(3, 1, 2); 
-plot(t, carrier_signal); 
-title('Carrier Signal'); 
-xlabel('Time'); 
-ylabel('Amplitude'); 
-subplot(3, 1, 3); 
-plot(t, ask_signal); 
-title('ASK Signal'); 
-xlabel('Time'); 
-ylabel('Amplitude'); 
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+data = [1, 0, 1, 0, 1, 1, 0, 1]  # Binary data to be transmitted
+bit_duration = 1  # Duration of each bit (in seconds)
+fc = 10  # Carrier frequency (Hz)
+amplitude = 2  # Amplitude of the carrier
+sampling_rate = 1000  # Samples per bit
+
+t = np.arange(0, bit_duration * len(data), 1 / sampling_rate)
+message_signal = np.repeat(data, sampling_rate)
+carrier_signal = amplitude * np.sin(2 * np.pi * fc * t)
+ask_signal = np.zeros(len(t))  # Initialize with zeros
+
+for i, bit in enumerate(data):
+    if bit == 1:
+        t_bit = np.arange(0, bit_duration, 1 / sampling_rate)
+        ask_signal[i * sampling_rate : (i + 1) * sampling_rate] = amplitude * np.sin(2 * np.pi * fc * t_bit)
+
+plt.figure(figsize=(12, 8))
+
+# Plot Message Signal
+plt.subplot(3, 1, 1)
+plt.plot(t, message_signal, 'b')
+plt.title('Message Signal')
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
+plt.grid(True)
+
+# Plot Carrier Signal
+plt.subplot(3, 1, 2)
+plt.plot(t, carrier_signal, 'r')
+plt.title('Carrier Signal')
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
+plt.grid(True)
+
+# Plot ASK Modulated Signal
+plt.subplot(3, 1, 3)
+plt.plot(t, ask_signal, 'g')
+plt.title('ASK Modulated Signal')
+plt.xlabel('Time (s)')
+plt.ylabel('Amplitude')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+```
+
 
 **FSK MODULATION**
-//FSK modulation 
+```python
+ 
 clear; 
 clc; 
 // Parameters 
@@ -141,8 +148,10 @@ plot(t, fsk_signal);
 title('FSK Signal'); 
 xlabel('Time'); 
 ylabel('Amplitude');
+```
 
 **PSK MODULATION**
+```python
 clear; 
 clc; 
 // Parameters 
@@ -185,19 +194,20 @@ subplot(3, 1, 3);
 plot(t, psk_signal); 
 title('PSK Signal'); 
 xlabel('Time'); 
-ylabel('Amplitude');``` </pre>
+ylabel('Amplitude');
+```
 
 
 
 # OUTPUT
 ASK MODULATION
-![image](https://github.com/user-attachments/assets/cb975c1c-bf37-4eae-96e9-21ca886167da)
+![image](https://github.com/user-attachments/assets/89704f7a-d147-4425-b7f3-eec1111e8fd1)
+
 FSK MODULATION
-![image](https://github.com/user-attachments/assets/a31e7a57-9ce7-4493-8b46-5f27ce1c6ee4)
+![image](https://github.com/user-attachments/assets/f9a1085f-0c38-4570-8aaa-03ebb9fef544)
+
 PSK MODULATION
-![image](https://github.com/user-attachments/assets/53a53561-8cf0-4003-9872-ef5bd8c84f68)
-
-
+![image](https://github.com/user-attachments/assets/9f3d8514-4dda-4707-a188-c95327ddbdf1)
 
 
 
